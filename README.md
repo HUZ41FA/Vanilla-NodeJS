@@ -5,5 +5,5 @@ This is for experimental/Learning purposes. In most cases you would use somethin
 ## Routes 
 ### GET  /products
 ### POST /products
-### PUT  /products/<id>
+### PUT  /products/ &ltid
 ### DELETE /products/<id>
