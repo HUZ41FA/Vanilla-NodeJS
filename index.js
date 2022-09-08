@@ -1,19 +1,33 @@
 import http from 'http'
-import product from './data/products.json' assert {type: "json"}
+import products from './data/products.json' assert {type : 'json'}
+import { createProduct, deleteProduct, getAllproducts, getProductById, updateProduct, } from './controllers/productController.js'
 
-const PORT = process.env.PORT || 5000
 
-const server = http.createServer((req, res)=>{
-    if(req.url == '/'){
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'text/html')
-        res.write("<h1>Huzaifa Khan</h1>")
-        res.end()
-    }else if(req.url == '/api'){
-        res.writeHead(200, {'Content-Type' : 'application/json'})
-        res.end(JSON.stringify(product))
+const server = http.createServer((req, res) => {
+    if(req.url === '/api/products' && req.method === 'GET'){
+        getAllproducts(req, res)
+    }else if(req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'GET'){
+        const id = req.url.split('/')[3] 
+        getProductById(req, res, id)
+    }else if(req.url === '/api/products' && req.method === 'POST'){
+        
+            createProduct(req, res)
+      
 
+       
+        
+    }else if(req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'PUT'){
+        const id = req.url.split('/')[3]
+        updateProduct(req, res, id)
+    }else if(req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'DELETE'){
+        const id = req.url.split('/')[3]
+        deleteProduct(req, res, id)
+    }else{
+        res.writeHead(404, {'Content-Type' : 'text/html'})
+        res.end('<h1>Unable To Locate resource</h1>')
     }
-}) 
+})
 
-server.listen(PORT, ()=>{console.log(`Server Running At PORT: ${PORT}`)})
+const PORT = process.env.PORT || 3000
+
+server.listen(PORT, ()=>{console.log(`Server running on PORT: ${PORT}`)})
